@@ -1,0 +1,34 @@
+local player = game:GetService("Players").LocalPlayer;
+
+local accuracy_bounds = {
+    Perfect = -5, 
+    Great = -95,
+    Okay = -100
+};
+
+local accuracy_names = {"Perfect", "Great", "Okay"};
+
+local accuracy = shared.accuracy or "Perfect"; -- Perfect, Great, Okay, Random
+local note_time_target = accuracy_bounds[accuracy];
+
+local track_system;
+
+--// functions 
+
+local function get_track_action_functions(track_system)
+    local press_track, release_track; 
+    
+    for index, track_function in next, track_system do 
+        if type(track_function) == "function" then 
+            local constants = getconstants(track_function);
+            
+            if table.find(constants, "press") then 
+                press_track = track_function;
+                
+                if release_track then 
+                    break; 
+                end;
+            elseif table.find(constants, "release") then 
+                release_track = track_function;
+                
+                if press_track
